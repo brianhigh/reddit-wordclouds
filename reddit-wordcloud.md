@@ -7,23 +7,26 @@ Brian High
 ## Get word frequencies
 
 To make a simple wordcloud of a Reddit forum ("subreddit"), we can use 
-[reddit-analysis](https://github.com/rhiever/reddit-analysis) to generate a CSV 
-of word frequencies. It uses the Reddit API to get data from the Reddit website.
+`word_freqs` from the [reddit-analysis](https://github.com/rhiever/reddit-analysis) 
+package to generate an output file of word frequencies. It uses the Reddit 
+API to get data from the Reddit website.
 
 
-```bash
+```r
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Then run this from your Bash (Terminal) shell
-[ -f subreddit-publichealth.csv ] || word_freqs /u/USERNAME /r/publichealth
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+if (! file.exists("subreddit-publichealth.csv")){
+    system("/PATH/TO/word_freqs /u/USERNAME /r/publichealth", intern=TRUE)
+}
 ```
 
-## Install and load `wordcloud` package
+## Install and load packages
 
 We will install packages only if we don't already have them.
 
 
 ```r
-for (pkg in c("wordcloud")) {
+for (pkg in c("RColorBrewer", "wordcloud")) {
     if (! require(pkg, character.only=T)) { 
         install.packages(pkg, repos="http://cran.fhcrc.org", dependencies=TRUE)
         suppressPackageStartupMessages(library(pkg))
@@ -32,28 +35,23 @@ for (pkg in c("wordcloud")) {
 ```
 
 ```
-## Loading required package: wordcloud
 ## Loading required package: RColorBrewer
+## Loading required package: wordcloud
 ```
 
-## Set `knitr` options
-
-Set the default figure size and width. We want large wordclouds.
-
-
-```r
-library("knitr")
-opts_chunk$set(fig.width=10, fig.height=10)
+```
+## Warning: package 'wordcloud' was built under R version 3.1.3
 ```
 
 ## Wordcloud function
 
-It is very easy to make a wordcloud from the CSV. Just import the data into a 
-data.frame and run the `wordcloud` function on the word and frequency columns.
+It is very easy to make a wordcloud from the `word_freqs` output. Just import 
+the data into a `data.frame` and run the `wordcloud` function on the word and 
+frequency columns.
 
 We will set a few other options with `par` and `title` to make the clouds nicer.
 
-Wrapping this in a function will allow us to make many clouds at once.
+Wrapping this in a function will allow us to make clouds quickly and easily.
 
 
 ```r
@@ -62,52 +60,61 @@ wc <- function(subr){
     data <- read.table(file = paste0('subreddit-', subr, '.csv', collapse=''), 
                         header = FALSE, sep = ':', stringsAsFactors = FALSE, 
                         col.names = c("word", "freq"), nrows=100)
-    
+
     # Use a black background, large bold white title text, and serif font
     par(bg = "black", col.main = "white", family = "serif", 
-        cex.main = 3, font.main = 2)
-    
+        cex.main = 2, font.main = 2)
+
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(6, 1))
-    
+              random.color = TRUE, scale=c(2.75, 0.75))
+
     # Set the title to the subreddit name
     title(paste0('/ r / ', subr, collapse=''))
 }
 ```
 
-## /r/publichealth wordcloud
+## /r/publichealth
 
-Try our first wordcloud: /r/publichealth
+Try our first wordcloud.
 
 
 ```r
 wc("publichealth")
 ```
 
-![](reddit-wordcloud_files/figure-html/unnamed-chunk-5-1.png) 
+![](reddit-wordcloud_files/figure-html/unnamed-chunk-4-1.png) 
 
 ## More, more!
 
 How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats", 
 and "learnprogramming"?
 
-### Make more CSV files!
 
-
-```bash
-for subr in \
-bioinformatics datascience dataisbeautiful python rstats learnprogramming; do \
-    [ -f subreddit-$subr.csv ] || word_freqs /u/USERNAME /r/$subr
-done
+```r
+subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
+                "rstats", "learnprogramming")
 ```
 
-### Make more wordclouds!
+Running `word_freqs` for all of these "subs" could take awhile...
 
 
 ```r
-res <- sapply(c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming"), wc)
+# Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+for (subr in subs) {
+    if (! file.exists(paste0(c("subreddit-", subr, ".csv"), collapse=""))) {
+        system(paste0(c("/PATH/TO/word_freqs /u/USERNAME /r/", subr), 
+                      collapse=""), intern=TRUE)
+    }    
+}
+```
+
+We can generate all of them at once using `sapply`
+
+
+```r
+res <- sapply(subs, wc)
 ```
 
 ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-1.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-2.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-3.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-4.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-5.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-6.png) 
