@@ -28,10 +28,11 @@ We will install packages only if we don't already have them.
 
 
 ```r
+# Load required packages. Install packages when necessary.
 for (pkg in c("RColorBrewer", "wordcloud")) {
-    if (! require(pkg, character.only=TRUE)) { 
+    if (! suppressWarnings(require(pkg, character.only=TRUE))) {
         install.packages(pkg, repos="http://cran.fhcrc.org", dependencies=TRUE)
-        suppressPackageStartupMessages(library(pkg, character.only=TRUE))
+        suppressWarnings(require(pkg, character.only=TRUE))
     }
 }
 ```
