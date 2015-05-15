@@ -1,6 +1,6 @@
 # Reddit Wordclouds with Python and R
 Brian High  
-`r format(Sys.time(), '%B %d, %Y')`  
+2015-05-14  
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 
@@ -14,7 +14,7 @@ of word frequencies. It uses the Reddit API to get data from the Reddit website.
 ```bash
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
 # Then run this from your Bash (Terminal) shell
-[ -f subreddit-publichealth.csv ] || word_freqs /u/USERNAME /r/publichealth
+[ -f subreddit-publichealth.csv ] && word_freqs /u/USERNAME /r/publichealth
 ```
 
 ## Install and load `wordcloud` package
@@ -98,7 +98,7 @@ and "learnprogramming"?
 ```bash
 for subr in \
 bioinformatics datascience dataisbeautiful python rstats learnprogramming; do \
-    [ -f subreddit-$subr.csv ] || word_freqs /u/USERNAME /r/$subr
+    [ -f subreddit-$subr.csv ] && word_freqs /u/USERNAME /r/$subr
 done
 ```
 

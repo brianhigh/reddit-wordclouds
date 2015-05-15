@@ -16,7 +16,7 @@ of word frequencies. It uses the Reddit API to get data from the Reddit website.
 ```bash
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
 # Then run this from your Bash (Terminal) shell
-[ -f subreddit-publichealth.csv ] || word_freqs /u/USERNAME /r/publichealth
+[ -f subreddit-publichealth.csv ] && word_freqs /u/USERNAME /r/publichealth
 ```
 
 ## Install and load `wordcloud` package
@@ -84,7 +84,7 @@ and "learnprogramming"?
 ```bash
 for subr in \
 bioinformatics datascience dataisbeautiful python rstats learnprogramming; do \
-    [ -f subreddit-$subr.csv ] || word_freqs /u/USERNAME /r/$subr
+    [ -f subreddit-$subr.csv ] && word_freqs /u/USERNAME /r/$subr
 done
 ```
 
