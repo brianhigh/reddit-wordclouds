@@ -14,9 +14,9 @@ API to get data from the Reddit website.
 
 ```r
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+# Replace USER with your own Reddit user name.
 if (! file.exists("subreddit-publichealth.csv")){
-    system("/PATH/TO/word_freqs /u/USERNAME /r/publichealth", intern=TRUE)
+    system("word_freqs /u/USER /r/publichealth", intern=TRUE)
 }
 ```
 
@@ -67,7 +67,7 @@ wc <- function(subr){
 
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(2.75, 0.75))
+              random.color = TRUE, scale=c(2.65, 0.75))
 
     # Set the title to the subreddit name
     title(paste0('/ r / ', subr, collapse=''))
@@ -92,8 +92,7 @@ and "learnprogramming"?
 
 
 ```r
-subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming")
+subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", "rstats", "learnprogramming")
 ```
 
 Running `word_freqs` for all of these "subs" could take awhile...
@@ -101,11 +100,10 @@ Running `word_freqs` for all of these "subs" could take awhile...
 
 ```r
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+# Replace USER with your own Reddit user name.
 for (subr in subs) {
     if (! file.exists(paste0(c("subreddit-", subr, ".csv"), collapse=""))) {
-        system(paste0(c("/PATH/TO/word_freqs /u/USERNAME /r/", subr), 
-                      collapse=""), intern=TRUE)
+        system(paste0(c("word_freqs /u/USER /r/", subr), collapse=""), intern=TRUE)
     }    
 }
 ```

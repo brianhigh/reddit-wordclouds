@@ -26,9 +26,9 @@ API to get data from the Reddit website.
 
 ```{r, eval=FALSE}
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+# Replace USER with your own Reddit user name.
 if (! file.exists("subreddit-publichealth.csv")){
-    system("/PATH/TO/word_freqs /u/USERNAME /r/publichealth", intern=TRUE)
+    system("word_freqs /u/USER /r/publichealth", intern=TRUE)
 }
 ```
 
@@ -67,7 +67,7 @@ wc <- function(subr){
     
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(3, .5))
+              random.color = TRUE, scale=c(2.75, 0.75))
 }
 ```
 
@@ -93,17 +93,15 @@ Running `word_freqs` for all of these "subs" could take awhile...
 
 ```{r, eval=FALSE}
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+# Replace USER with your own Reddit user name.
 for (subr in subs) {
     if (! file.exists(paste0(c("subreddit-", subr, ".csv"), collapse=""))) {
-        system(paste0(c("/PATH/TO/word_freqs /u/USERNAME /r/", subr), 
-                      collapse=""), intern=TRUE)
+        system(paste0(c("word_freqs /u/USER /r/", subr), collapse=""), intern=TRUE)
     }    
 }
 ```
 
-We could generate all of them at once using `sapply`, but they would all run
-together. Since this is a slide presentation, let's make one per slide.
+We could make all of them at once using `sapply`, but let's make one per slide.
 
 ```{r, eval=FALSE}
 res <- sapply(subs, wc)
