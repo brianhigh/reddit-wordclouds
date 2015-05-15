@@ -20,21 +20,24 @@ output:
 ## Get word frequencies
 
 To make a simple wordcloud of a Reddit forum ("subreddit"), we can use 
-[reddit-analysis](https://github.com/rhiever/reddit-analysis) to generate a CSV 
-of word frequencies. It uses the Reddit API to get data from the Reddit website.
+`word_freqs` from the [reddit-analysis](https://github.com/rhiever/reddit-analysis) 
+package to generate an output file of word frequencies. It uses the Reddit 
+API to get data from the Reddit website.
 
-```{r, engine='bash', eval=FALSE}
+```{r, eval=FALSE}
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Then run this from your Bash (Terminal) shell
-[ -f subreddit-publichealth.csv ] || word_freqs /u/USERNAME /r/publichealth
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+if (! file.exists("subreddit-publichealth.csv")){
+    system("/PATH/TO/word_freqs /u/USERNAME /r/publichealth", intern=TRUE)
+}
 ```
 
-## Install and load `wordcloud` package
+## Install and load packages
 
 We will install packages only if we don't already have them.
 
 ```{r}
-for (pkg in c("wordcloud")) {
+for (pkg in c("RColorBrewer", "wordcloud")) {
     if (! require(pkg, character.only=T)) { 
         install.packages(pkg, repos="http://cran.fhcrc.org", dependencies=TRUE)
         suppressPackageStartupMessages(library(pkg))
@@ -44,10 +47,11 @@ for (pkg in c("wordcloud")) {
 
 ## Wordcloud function
 
-It is very easy to make a wordcloud from the CSV. Just import the data into a 
-data.frame and run the `wordcloud` function on the word and frequency columns.
+It is very easy to make a wordcloud from the `word_freqs` output. Just import 
+the data into a `data.frame` and run the `wordcloud` function on the word and 
+frequency columns.
 
-We will set a few other options with `par` and `title` to make the clouds nicer.
+We will set a few other options with `par` to make the clouds nicer.
 
 Wrapping this in a function will allow us to make clouds quickly and easily.
 
@@ -80,19 +84,29 @@ wc("publichealth")
 How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats", 
 and "learnprogramming"?
 
-```{r, engine='bash', eval=FALSE}
-for subr in \
-bioinformatics datascience dataisbeautiful python rstats learnprogramming; do \
-    [ -f subreddit-$subr.csv ] || word_freqs /u/USERNAME /r/$subr
-done
+```{r}
+subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
+                "rstats", "learnprogramming")
+```
+
+Running `word_freqs` for all of these "subs" could take awhile...
+
+```{r, eval=FALSE}
+# Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+for (subr in subs) {
+    if (! file.exists(paste0(c("subreddit-", subr, ".csv"), collapse=""))) {
+        system(paste0(c("/PATH/TO/word_freqs /u/USERNAME /r/", subr), 
+                      collapse=""), intern=TRUE)
+    }    
+}
 ```
 
 We could generate all of them at once using `sapply`, but they would all run
 together. Since this is a slide presentation, let's make one per slide.
 
 ```{r, eval=FALSE}
-res <- sapply(c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming"), wc)
+res <- sapply(subs, wc)
 ```
 
 ## /r/bioinformatics

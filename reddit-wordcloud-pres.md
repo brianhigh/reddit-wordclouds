@@ -9,23 +9,26 @@
 ## Get word frequencies
 
 To make a simple wordcloud of a Reddit forum ("subreddit"), we can use 
-[reddit-analysis](https://github.com/rhiever/reddit-analysis) to generate a CSV 
-of word frequencies. It uses the Reddit API to get data from the Reddit website.
+`word_freqs` from the [reddit-analysis](https://github.com/rhiever/reddit-analysis) 
+package to generate an output file of word frequencies. It uses the Reddit 
+API to get data from the Reddit website.
 
 
-```bash
+```r
 # Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
-# Then run this from your Bash (Terminal) shell
-[ -f subreddit-publichealth.csv ] || word_freqs /u/USERNAME /r/publichealth
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+if (! file.exists("subreddit-publichealth.csv")){
+    system("/PATH/TO/word_freqs /u/USERNAME /r/publichealth", intern=TRUE)
+}
 ```
 
-## Install and load `wordcloud` package
+## Install and load packages
 
 We will install packages only if we don't already have them.
 
 
 ```r
-for (pkg in c("wordcloud")) {
+for (pkg in c("RColorBrewer", "wordcloud")) {
     if (! require(pkg, character.only=T)) { 
         install.packages(pkg, repos="http://cran.fhcrc.org", dependencies=TRUE)
         suppressPackageStartupMessages(library(pkg))
@@ -34,16 +37,21 @@ for (pkg in c("wordcloud")) {
 ```
 
 ```
-## Loading required package: wordcloud
 ## Loading required package: RColorBrewer
+## Loading required package: wordcloud
+```
+
+```
+## Warning: package 'wordcloud' was built under R version 3.1.3
 ```
 
 ## Wordcloud function
 
-It is very easy to make a wordcloud from the CSV. Just import the data into a 
-data.frame and run the `wordcloud` function on the word and frequency columns.
+It is very easy to make a wordcloud from the `word_freqs` output. Just import 
+the data into a `data.frame` and run the `wordcloud` function on the word and 
+frequency columns.
 
-We will set a few other options with `par` and `title` to make the clouds nicer.
+We will set a few other options with `par` to make the clouds nicer.
 
 Wrapping this in a function will allow us to make clouds quickly and easily.
 
@@ -81,11 +89,23 @@ How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats",
 and "learnprogramming"?
 
 
-```bash
-for subr in \
-bioinformatics datascience dataisbeautiful python rstats learnprogramming; do \
-    [ -f subreddit-$subr.csv ] || word_freqs /u/USERNAME /r/$subr
-done
+```r
+subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
+                "rstats", "learnprogramming")
+```
+
+Running `word_freqs` for all of these "subs" could take awhile...
+
+
+```r
+# Install reddit-analysis first: https://github.com/rhiever/reddit-analysis
+# Replace USERNAME with your own Reddit user name. Edit PATH TO word_freqs.
+for (subr in subs) {
+    if (! file.exists(paste0(c("subreddit-", subr, ".csv"), collapse=""))) {
+        system(paste0(c("/PATH/TO/word_freqs /u/USERNAME /r/", subr), 
+                      collapse=""), intern=TRUE)
+    }    
+}
 ```
 
 We could generate all of them at once using `sapply`, but they would all run
@@ -93,8 +113,7 @@ together. Since this is a slide presentation, let's make one per slide.
 
 
 ```r
-res <- sapply(c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming"), wc)
+res <- sapply(subs, wc)
 ```
 
 ## /r/bioinformatics
@@ -104,7 +123,7 @@ res <- sapply(c("bioinformatics", "datascience", "dataisbeautiful", "python",
 wc("bioinformatics")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-7-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-8-1.png) 
 
 ## /r/datascience
 
@@ -113,7 +132,7 @@ wc("bioinformatics")
 wc("datascience")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-8-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-9-1.png) 
 
 ## /r/dataisbeautiful
 
@@ -122,7 +141,7 @@ wc("datascience")
 wc("dataisbeautiful")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-9-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-10-1.png) 
 
 ## /r/python
 
@@ -131,7 +150,7 @@ wc("dataisbeautiful")
 wc("python")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-10-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-11-1.png) 
 
 ## /r/rstats
 
@@ -140,7 +159,7 @@ wc("python")
 wc("rstats")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-11-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-12-1.png) 
 
 ## /r/learnprogramming
 
@@ -149,4 +168,4 @@ wc("rstats")
 wc("learnprogramming")
 ```
 
-![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-12-1.png) 
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-13-1.png) 
