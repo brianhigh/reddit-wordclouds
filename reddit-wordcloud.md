@@ -39,10 +39,6 @@ for (pkg in c("RColorBrewer", "wordcloud")) {
 ## Loading required package: wordcloud
 ```
 
-```
-## Warning: package 'wordcloud' was built under R version 3.1.3
-```
-
 ## Wordcloud function
 
 It is very easy to make a wordcloud from the `word_freqs` output. Just import 
@@ -67,7 +63,7 @@ wc <- function(subr){
 
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(2.65, 0.75))
+              random.color = TRUE, scale=c(2.60, 0.70))
 
     # Set the title to the subreddit name
     title(paste0('/ r / ', subr, collapse=''))
@@ -88,11 +84,12 @@ wc("publichealth")
 ## More, more!
 
 How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats", 
-and "learnprogramming"?
+"learnprogramming", and "programming"?
 
 
 ```r
-subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", "rstats", "learnprogramming")
+subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
+          "rstats", "learnprogramming", "programming")
 ```
 
 Running `word_freqs` for all of these "subs" could take awhile...
@@ -115,4 +112,4 @@ We can generate all of them at once using `sapply`
 res <- sapply(subs, wc)
 ```
 
-![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-1.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-2.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-3.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-4.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-5.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-6.png) 
+![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-1.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-2.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-3.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-4.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-5.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-6.png) ![](reddit-wordcloud_files/figure-html/unnamed-chunk-7-7.png) 

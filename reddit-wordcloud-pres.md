@@ -41,10 +41,6 @@ for (pkg in c("RColorBrewer", "wordcloud")) {
 ## Loading required package: wordcloud
 ```
 
-```
-## Warning: package 'wordcloud' was built under R version 3.1.3
-```
-
 ## Wordcloud function
 
 It is very easy to make a wordcloud from the `word_freqs` output. Just import 
@@ -68,7 +64,7 @@ wc <- function(subr){
     
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(2.75, 0.75))
+              random.color = TRUE, scale=c(2.65, 0.65))
 }
 ```
 
@@ -86,12 +82,12 @@ wc("publichealth")
 ## More, more!
 
 How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats", 
-and "learnprogramming"?
+"learnprogramming", and "programming"?
 
 
 ```r
 subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming")
+                "rstats", "learnprogramming", "programming")
 ```
 
 Running `word_freqs` for all of these "subs" could take awhile...
@@ -167,3 +163,12 @@ wc("learnprogramming")
 ```
 
 ![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-13-1.png) 
+
+## /r/programming
+
+
+```r
+wc("programming")
+```
+
+![](reddit-wordcloud-pres_files/figure-html/unnamed-chunk-14-1.png) 

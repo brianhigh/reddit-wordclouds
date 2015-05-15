@@ -10,7 +10,7 @@ output:
     fig_height: 4
     keep_md: yes
     smaller: yes
-    logo: uw_seal_128.png
+    logo: logo_128.png
 ---
 
 ## 
@@ -67,7 +67,7 @@ wc <- function(subr){
     
     # Use scale= to limit the size of the words so they will fit in the cloud
     wordcloud(data$word, data$freq, colors=brewer.pal(12, "Set3"), 
-              random.color = TRUE, scale=c(2.75, 0.75))
+              random.color = TRUE, scale=c(2.65, 0.65))
 }
 ```
 
@@ -82,11 +82,11 @@ wc("publichealth")
 ## More, more!
 
 How about "bioinformatics", "datascience", "dataisbeautiful", python", "rstats", 
-and "learnprogramming"?
+"learnprogramming", and "programming"?
 
 ```{r}
 subs <- c("bioinformatics", "datascience", "dataisbeautiful", "python", 
-                "rstats", "learnprogramming")
+                "rstats", "learnprogramming", "programming")
 ```
 
 Running `word_freqs` for all of these "subs" could take awhile...
@@ -141,4 +141,10 @@ wc("rstats")
 
 ```{r}
 wc("learnprogramming")
+```
+
+## /r/programming
+
+```{r}
+wc("programming")
 ```
