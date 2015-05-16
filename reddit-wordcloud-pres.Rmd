@@ -41,7 +41,9 @@ We will install packages only if we don't already have them.
 for (pkg in c("RColorBrewer", "wordcloud")) {
     if (! suppressWarnings(require(pkg, character.only=TRUE))) {
         install.packages(pkg, repos="http://cran.fhcrc.org", dependencies=TRUE)
-        suppressWarnings(require(pkg, character.only=TRUE))
+        if (! suppressWarnings(require(pkg, character.only=TRUE)) ) {
+            stop(paste0(c("Can't load package: ", pkg, "!"), collapse = ""))
+        }
     }
 }
 ```
